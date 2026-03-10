@@ -8,6 +8,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Optional
 import uvicorn
@@ -20,6 +22,14 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Rural Literacy AI Tool")
+
+# Get the project root directory
+project_root = os.path.dirname(os.path.abspath(__file__))
+frontend_path = os.path.join(os.path.dirname(project_root), 'frontend')
+
+# Serve static files from frontend
+if os.path.exists(frontend_path):
+    app.mount("/static", StaticFiles(directory=frontend_path), name="static")
 
 # CORS middleware
 app.add_middleware(
@@ -56,6 +66,9 @@ class SyncRequest(BaseModel):
 # Routes
 @app.get("/")
 async def root():
+    index_path = os.path.join(frontend_path, 'index.html')
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
     return {
         "name": "Rural Literacy AI Tool",
         "version": "1.0.0",
