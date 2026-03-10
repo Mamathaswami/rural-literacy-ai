@@ -21,7 +21,7 @@ Fill in these settings:
 | Region | `Oregon` (or closest to you) |
 | Branch | `main` |
 | Runtime | `Python` |
-| Build Command | `pip install -r requirements.txt/dependencies.txt` |
+| Build Command | `pip install -r requirements.txt` |
 | Start Command | `gunicorn -w 4 -k uvicorn.workers.UvicornWorker backend.main:app --bind 0.0.0.0:$PORT` |
 
 ## Step 4: Select Free Tier

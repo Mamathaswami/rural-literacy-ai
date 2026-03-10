@@ -23,8 +23,8 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Install dependencies
-COPY requirements.txt/dependencies.txt .
-RUN pip install --no-cache-dir -r dependencies.txt
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy app files
 COPY backend/ ./backend/
@@ -52,7 +52,7 @@ docker run -p 8000:8000 -p 3001:3001 rural-literacy-ai
 
 **Build Command:**
 ```bash
-pip install -r requirements.txt/dependencies.txt
+pip install -r requirements.txt
 ```
 
 **Start Command:**
@@ -95,7 +95,7 @@ server {
 2. Create account on render.com
 3. Create new Web Service
 4. Settings:
-   - Build Command: `pip install -r requirements.txt/dependencies.txt`
+   - Build Command: `pip install -r requirements.txt`
    - Start Command: `gunicorn -w 4 -k uvicorn.workers.UvicornWorker backend.main:app --bind 0.0.0.0:$PORT`
 5. Deploy!
 
