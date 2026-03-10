@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rural Literacy AI Tool</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        h1 { text-align: center; color: #333; margin-bottom: 20px; }
+        .controls { 
+            display: flex; 
+            gap: 10px; 
+            margin-bottom: 15px; 
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f5f5f5;
+            padding: 8px 15px;
+            border-radius: 25px;
+        }
+        .control-group label { font-size: 14px; color: #555; }
+        select { padding: 5px 10px; border-radius: 15px; border: 1px solid #ddd; }
+        .voice-btn {
+            background: #ef4444 !important;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            padding: 0 !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        .voice-btn.recording {
+            animation: pulse 1s infinite;
+            background: #dc2626 !important;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .chat-container { 
+            border: 2px solid #e5e7eb; 
+            height: 400px; 
+            overflow-y: auto; 
+            padding: 20px; 
+            margin-bottom: 20px;
+            border-radius: 10px;
+            background: #fafafa;
+        }
+        .message { 
+            margin: 10px 0; 
+            padding: 12px 15px; 
+            border-radius: 15px; 
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        .user-message { 
+            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%); 
+            color: white; 
+            text-align: right; 
+            margin-left: auto;
+        }
+        .bot-message { 
+            background: #f3f4f6; 
+            color: #1f2937;
+        }
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+        input[type="text"] { 
+            flex: 1; 
+            padding: 15px; 
+            font-size: 16px; 
+            border: 2px solid #e5e7eb; 
+            border-radius: 25px;
+            outline: none;
+        }
+        input[type="text"]:focus { border-color: #6366F1; }
+        .send-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .send-btn:hover { opacity: 0.9; }
+        .listening-indicator {
+            display: none;
+            text-align: center;
+            padding: 10px;
+            color: #ef4444;
+            font-weight: bold;
+        }
+        .listening-indicator.active { display: block; }
+        .mode-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            margin-left: 5px;
+        }
+        .mode-online { background: #10b981; color: white; }
+        .mode-offline { background: #f59e0b; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Rural Literacy AI Tool</h1>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label>🌐 Language:</label>
+                <select id="languageSelect" onchange="changeLanguage()">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी (Hindi)</option>
+                    <option value="ta">தமிழ் (Tamil)</option>
+                    <option value="te">తెలుగు (Telugu)</option>
+                    <option value="bn">বাংলা (Bengali)</option>
+                    <option value="mr">मराठी (Marathi)</option>
+                    <option value="gu">ગુજરાતી (Gujarati)</option>
+                    <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                    <option value="ml">മലയാളം (Malayalam)</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>🎤 Voice:</label>
+                <button id="voiceBtn" class="voice-btn send-btn" onclick="toggleVoice()" title="Click to speak">🎤</button>
+            </div>
+            <div class="control-group">
+                <label>🔊 Audio:</label>
+                <input type="checkbox" id="audioToggle" checked onchange="toggleAudio()">
+            </div>
+            <div class="control-group">
+                <label>📡 Mode:</label>
+                <select id="modeSelect">
+                    <option value="auto">Auto</option>
+                    <option value="online">Online</option>
+                    <option value="offline">Offline</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="listening-indicator" id="listeningIndicator">
+            🎤 Listening... Speak now!
+        </div>
+        
+        <div class="chat-container" id="chatContainer">
+            <div class="message bot-message">
+                👋 Namaste! How can I help you today?<br>
+                <small>Ask me about education, health, farming, government schemes, and more!</small>
+            </div>
+        </div>
+        
+        <div class="input-area">
+            <input type="text" id="messageInput" placeholder="Type or speak your message..." onkeypress="handleKeyPress(event)">
+            <button class="send-btn" onclick="sendMessage()">Send ➤</button>
+        </div>
+    </div>
+
+    <script>
+        // Multilingual translations for common responses
+        const translations = {
+            hi: {
+                namaste: "नमस्ते! मैं आज आपकी कैसे मदद कर सकता हूं?",
+                listening: "🎤 सुन रहा है... बोलिए!",
+                speaking: "🔊 बोल रहा है...",
+                error: "त्रुटि:",
+                askAbout: "आप मुझसे शिक्षा, स्वास्थ्य, खेती, सरकारी योजनाओं के बारे में पूछ सकते हैं"
+            },
+            ta: {
+                namaste: "வணக்கம்! நான் உங்களுக்கு எப்படி உதவி செய்ய முடியும்?",
+                listening: "🎤 கேட்கிறது... பேசுங்கள்!",
+                speaking: "🔊 பேசுகிறது...",
+                error: "பிழை:",
+                askAbout: "கல்வி, ஆரோக்கியம், விவசாயம், அரசு திட்டங்களைப் பற்றி என்னிடம் கேட்கலாம்"
+            },
+            te: {
+                namaste: "నమస్కారం! నేను మీకు ఎలా సహాయం చేయగలను?",
+                listening: "🎤 వినుతున్నాడు... మాట్లాడండి!",
+                speaking: "🔊 మాట్లాడుతుంది...",
+                error: "లోపం:",
+                askAbout: "విద్య, ఆరోగ్యం, వ్యవసాయం, ప్రభుత్వ పథకాల గురుంచి నా నుండి వెళ్ళవచ్చు"
+            },
+            bn: {
+                namaste: "নমস্কার! আমি আপনাকে কীভাবে সাহায্য করতে পারি?",
+                listening: "🎤 শুনছি... বলুন!",
+                speaking: "🔊 বলছে...",
+                error: "ত্রুটি:",
+                askAbout: "আপনি শিক্ষা, স্বাস্থ্য, কৃষি, সরকারি প্রকল্প সম্পর্কে জানতে পারেন"
+            },
+            mr: {
+                namaste: "नमस्कार! मी तुम्हाला कशी मदत करू शकतो?",
+                listening: "🎤 ऐकत आहे... बोला!",
+                speaking: "🔊 बोलत आहे...",
+                error: "त्रुटी:",
+                askAbout: "शिक्षा, आरोग्य, शेती, सरकारी योजनााबद्दल विचारा"
+            },
+            gu: {
+                namaste: "નમસ્તે! હું તમને કેવી રીતે મદદ કરી શકું?",
+                listening: "🎤 સાંભળું છુ... બોલો!",
+                speaking: "🔊 બોલે છે...",
+                error: "ભૂલ:",
+                askAbout: "શિક્ષા, સ્વાસ્થ્ય, ખેતી, સરકારી યોજનાઓ વિશે પૂછો"
+            },
+            kn: {
+                namaste: "ನಮಸ್ಕಾರ! ನಾನು ನಿಮಗೆ ಹೇಗೆ ಸಹಾಯ ಮಾಡಬಹುದು?",
+                listening: "🎤 ಕೇಳುತ್ತಿದ್ದೇನೆ... ಮಾತಾಡಿ!",
+                speaking: "🔊 ಮಾತಾಡುತ್ತಿದೆ...",
+                error: "ದೋಷ:",
+                askAbout: "ಶಿಕ್ಷಣ, ಆರೋಗ್ಯ, ಕೃಷಿ, ಸರ್ಕಾರಿ ಯೋಜನೆಗಳ ಬಗ್ಗೆ ಕೇಳಿ"
+            },
+            ml: {
+                namaste: "നമസ്കാരം! ഞാന്‍ നിങ്ങള്‍ക്ക് എങ്ങനെ സഹായിക്കാന്‍ കഴിയും?",
+                listening: "🎤 കേള്‍ക്കുന്നു... സംസാരിക്കൂ!",
+                speaking: "🔊 സംസാരിക്കുന്നു...",
+                error: "പിഴവ്:",
+                askAbout: "വിദ്യാഭ്യാസം, ആരോഗ്യം, കാര്‍ഷികം, സര്‍ക്കാര്‍ പദ്ധതികള്‍ എന്നിവ സംബന്ധിച്ച് ചോദിക്കൂ"
+            }
+        };
+
+        let recognition = null;
+        let synth = window.speechSynthesis;
+        let currentLanguage = 'en';
+        let audioEnabled = true;
+
+        // Initialize speech recognition
+        function initSpeechRecognition() {
+            if ('webkitSpeechRecognition' in window) {
+                recognition = new webkitSpeechRecognition();
+            } else if ('SpeechRecognition' in window) {
+                recognition = new SpeechRecognition();
+            }
+            
+            if (recognition) {
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                
+                // Set language based on selection
+                const langMap = {
+                    'en': 'en-US',
+                    'hi': 'hi-IN',
+                    'ta': 'ta-IN',
+                    'te': 'te-IN',
+                    'bn': 'bn-IN',
+                    'mr': 'mr-IN',
+                    'gu': 'gu-IN',
+                    'kn': 'kn-IN',
+                    'ml': 'ml-IN'
+                };
+                recognition.lang = langMap[currentLanguage] || 'en-US';
+                
+                recognition.onstart = function() {
+                    document.getElementById('listeningIndicator').classList.add('active');
+                    document.getElementById('voiceBtn').classList.add('recording');
+                };
+                
+                recognition.onend = function() {
+                    document.getElementById('listeningIndicator').classList.remove('active');
+                    document.getElementById('voiceBtn').classList.remove('recording');
+                };
+                
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    document.getElementById('messageInput').value = transcript;
+                    sendMessage();
+                };
+                
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error:', event.error);
+                    document.getElementById('listeningIndicator').classList.remove('active');
+                    document.getElementById('voiceBtn').classList.remove('recording');
+                };
+            }
+        }
+
+        // Toggle voice input
+        function toggleVoice() {
+            if (!recognition) {
+                initSpeechRecognition();
+            }
+            
+            if (recognition) {
+                if (document.getElementById('voiceBtn').classList.contains('recording')) {
+                    recognition.stop();
+                } else {
+                    // Update language before starting
+                    const langMap = {
+                        'en': 'en-US',
+                        'hi': 'hi-IN',
+                        'ta': 'ta-IN',
+                        'te': 'te-IN',
+                        'bn': 'bn-IN',
+                        'mr': 'mr-IN',
+                        'gu': 'gu-IN',
+                        'kn': 'kn-IN',
+                        'ml': 'ml-IN'
+                    };
+                    recognition.lang = langMap[currentLanguage] || 'en-US';
+                    recognition.start();
+                }
+            }
+        }
+
+        // Text to speech
+        function speak(text) {
+            if (!audioEnabled || !synth) return;
+            
+            // Cancel any ongoing speech
+            synth.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            
+            // Set language for speech
+            const langMap = {
+                'en': 'en-US',
+                'hi': 'hi-IN',
+                'ta': 'ta-IN',
+                'te': 'te-IN',
+                'bn': 'bn-IN',
+                'mr': 'mr-IN',
+                'gu': 'gu-IN',
+                'kn': 'kn-IN',
+                'ml': 'ml-IN'
+            };
+            utterance.lang = langMap[currentLanguage] || 'en-US';
+            utterance.rate = 0.9;
+            utterance.pitch = 1;
+            
+            synth.speak(utterance);
+        }
+
+        // Toggle audio output
+        function toggleAudio() {
+            audioEnabled = document.getElementById('audioToggle').checked;
+        }
+
+        // Change language
+        function changeLanguage() {
+            currentLanguage = document.getElementById('languageSelect').value;
+            
+            // Update recognition language if initialized
+            if (recognition) {
+                const langMap = {
+                    'en': 'en-US',
+                    'hi': 'hi-IN',
+                    'ta': 'ta-IN',
+                    'te': 'te-IN',
+                    'bn': 'bn-IN',
+                    'mr': 'mr-IN',
+                    'gu': 'gu-IN',
+                    'kn': 'kn-IN',
+                    'ml': 'ml-IN'
+                };
+                recognition.lang = langMap[currentLanguage] || 'en-US';
+            }
+            
+            // Show greeting in selected language
+            if (currentLanguage !== 'en') {
+                const trans = translations[currentLanguage];
+                if (trans) {
+                    addMessage(trans.namaste, 'bot');
+                    speak(trans.namaste);
+                }
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+            input.value = '';
+
+            // Add loading message
+            const loadingId = addMessage('Thinking...', 'bot');
+
+            try {
+                const mode = document.getElementById('modeSelect').value;
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        message: message, 
+                        user_id: 'user_' + Date.now(),
+                        language: currentLanguage,
+                        mode: mode
+                    })
+                });
+                const data = await response.json();
+                
+                // Remove loading and add response
+                document.getElementById(loadingId).remove();
+                addMessage(data.response, 'bot', data.mode);
+                
+                // Speak the response
+                speak(data.response);
+            } catch (error) {
+                document.getElementById(loadingId).remove();
+                const errorMsg = currentLanguage !== 'en' && translations[currentLanguage] 
+                    ? translations[currentLanguage].error + ' ' + error.message 
+                    : 'Error: ' + error.message;
+                addMessage(errorMsg, 'bot');
+            }
+        }
+
+        function addMessage(text, type, mode) {
+            const container = document.getElementById('chatContainer');
+            const div = document.createElement('div');
+            div.className = 'message ' + type + '-message';
+            
+            // Create message content wrapper
+            let messageContent = text;
+            
+            // Add mode badge for bot messages
+            if (type === 'bot' && mode) {
+                const modeClass = mode === 'online' ? 'mode-online' : 'mode-offline';
+                const modeText = mode === 'online' ? 'Online' : 'Offline';
+                messageContent = text + ' <span class="mode-badge ' + modeClass + '">' + modeText + '</span>';
+            }
+            
+            div.innerHTML = messageContent;
+            div.id = 'msg_' + Date.now();
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+            return div.id;
+        }
+
+        // Initialize speech recognition on page load
+        window.onload = function() {
+            initSpeechRecognition();
+        };
+    </script>
+</body>
+</html>
+

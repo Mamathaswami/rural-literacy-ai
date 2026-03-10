@@ -1,0 +1,103 @@
+[
+  {
+    "question": "what is pm kisan",
+    "answer": "PM-KISAN (Pradhan Mantri Kisan Samman Nidhi) is a central sector scheme that provides Rs 6000 per year to farmer families. The amount is paid in three equal installments of Rs 2000 every 4 months. To apply: Visit your nearest CSC or register on pmkisan.gov.in",
+    "category": "agriculture"
+  },
+  {
+    "question": "how to apply for aadhaar",
+    "answer": "To apply for Aadhaar: 1) Visit nearest Aadhaar Seva Kendra 2) Carry ID proof (Voter ID, Passport, etc.) 3) Provide address proof 4) Get biometric done (fingerprints, photo) 5) Receive Aadhaar within weeks. Enrollment is FREE!",
+    "category": "government"
+  },
+  {
+    "question": "what is ayushman bharat",
+    "answer": "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana (AB PM-JAY) provides free health insurance cover of Rs 5 lakh per family per year for secondary and tertiary care hospitalization. Covers pre and post hospitalization expenses. Check eligibility on mera.pmjay.gov.in",
+    "category": "health"
+  },
+  {
+    "question": "how to open bank account",
+    "answer": "To open a bank account: 1) Visit nearest bank branch 2) Carry ID proof (Aadhaar, Voter ID, Passport) 3) Fill account opening form 4) Submit passport photo 5) Initial deposit (can be Rs 0 for zero balance accounts under PMJDY)",
+    "category": "banking"
+  },
+  {
+    "question": "what is upi payment",
+    "answer": "UPI (Unified Payments Interface) allows instant money transfer using your phone number. To set up: 1) Download GPay/PhonePe/Paytm app 2) Link your bank account 3) Create UPI PIN 4) Send money using phone number or QR code. It's free and works 24/7!",
+    "category": "digital"
+  },
+  {
+    "question": "how to apply for job card",
+    "answer": "MNREGA Job Card: 1) Visit your local Gram Panchayat 2) Apply for job card with Aadhaar and photo 3) Get a job card with 100 days guaranteed work entitlement 4) Work is provided within 15 days of applying",
+    "category": "employment"
+  },
+  {
+    "question": "what is sukanya samriddhi",
+    "answer": "Sukanya Samriddhi Yojana is a savings scheme for girl child. Benefits: 8.2% interest rate, partial withdrawal for education after age 18, tax benefits under Section 80C. Open account at post office or bank for girl child below 10 years.",
+    "category": "government"
+  },
+  {
+    "question": "how to apply for pension",
+    "answer": "For old age pension: Visit your Gram Panchayat or municipal office with Aadhaar, age proof, and bank account details. Pradhan Mantri Shram Yogi Maan-dhan (PM-SYM) provides Rs 3000/month pension for unorganized workers aged 18-40. Apply on pmsym.gov.in",
+    "category": "government"
+  },
+  {
+    "question": "what is mid day meal",
+    "answer": "Mid-Day Meal Scheme provides free lunch to school children. Benefits: 1) Improves school attendance 2) Provides nutrition to children 3) Reduces dropout rates. Food is cooked in school kitchens. Covers students from Class 1 to 8 in government schools.",
+    "category": "education"
+  },
+  {
+    "question": "how to apply for scholarship",
+    "answer": "National Scholarship Portal (scholarships.gov.in) offers various scholarships: 1) Pre-Matric scholarships 2) Post-Matric scholarships 3) Merit-cum-Means scholarships A. Apply online withadhaar, income certificate, and previous marksheet.",
+    "category": "education"
+  },
+  {
+    "question": "what is soil health card",
+    "answer": "Soil Health Card tells farmers about soil nutrients. Benefits: 1) Know what nutrients your soil needs 2) Save money on fertilizers 3) Improve crop yield. Visit your local agricultural office or Krishi Vigyan Kendra (KVK) to get your soil tested for FREE.",
+    "category": "agriculture"
+  },
+  {
+    "question": "how to get kisan credit card",
+    "answer": "Kisan Credit Card (KCC): 1) Visit any bank branch 2) Fill KCC form 3) Provide land records and ID proof 4) Get credit limit based on landholding. Offers loan up to Rs 3 lakh at low interest rate (4%).",
+    "category": "agriculture"
+  },
+  {
+    "question": "what is pmay",
+    "answer": "Pradhan Mantri Awas Yojana (PMAY) provides affordable housing for urban and rural poor. Rural: House construction assistance up to Rs 1.20 lakh in plains, Rs 1.30 lakh in hills. Apply through Gram Panchayat.",
+    "category": "government"
+  },
+  {
+    "question": "how to register for covid vaccine",
+    "answer": "COVID-19 Vaccine Registration: 1) Visit cowin.gov.in or use Aarogya Setu app 2) Enter mobile number and OTP 3) Add ID proof (Aadhaar/Voter ID) 4) Choose date and center. Vaccines are FREE at government centers.",
+    "category": "health"
+  },
+  {
+    "question": "what is digital locker",
+    "answer": "DigiLocker is a cloud storage for documents. Benefits: 1) Store documents digitally 2) Get documents directly from government agencies 3) No need to carry physical copies. Sign up at digilocker.gov.in using Aadhaar.",
+    "category": "digital"
+  },
+  {
+    "question": "how to apply for pmjjby",
+    "answer": "Pradhan Mantri Jeevan Jyoti Bima Yojana (PMJJY) provides Rs 2 lakh life insurance cover for just Rs 436/year. Auto-debited from bank account. Cover age: 18-50 years. Apply at your bank branch.",
+    "category": "banking"
+  },
+  {
+    "question": "what is pmbsby",
+    "answer": "Pradhan Mantri Suraksha Bima Yojana (PMBSY) provides Rs 2 lakh accidental death cover for just Rs 20/year. Covers partial/total disability. Apply at your bank branch with Aadhaar.",
+    "category": "banking"
+  },
+  {
+    "question": "how to get birth certificate",
+    "answer": "Birth Certificate: 1) Register birth at local Gram Panchayat or municipal office within 21 days 2) Submit hospital record or affidavit 3) Get certificate. For online: Visit nvsp.nic.in or state government portal.",
+    "category": "government"
+  },
+  {
+    "question": "what is jan dhan yojana",
+    "answer": "Pradhan Mantri Jan Dhan Yojana (PMJDY): 1) Zero balance savings account 2) Free RuPay debit card 3) Rs 2 lakh accident insurance 4) Rs 30,000 life insurance. Visit any bank branch with Aadhaar.",
+    "category": "banking"
+  },
+  {
+    "question": "how to apply for ration card",
+    "answer": "Ration Card: 1) Visit local ration office or apply online 2) Submit Aadhaar, address proof, family details 3) Get card within 30 days. Used to buy subsidized food grains from fair price shops.",
+    "category": "government"
+  }
+]
+
